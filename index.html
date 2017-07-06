@@ -1,0 +1,28 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="dist/morse.js"></script>
+<script>
+var morse;
+$(function() {
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	var ctx = new AudioContext();
+	morse = new MorsePlayer(ctx,550,20,10);
+});
+function CQ() { 
+	morse.play("CQ"); 
+}
+function TU() { 
+	morse.play("TU"); 
+}
+function glass() { 
+	morse.play("GLASS"); 
+}
+</script>
+</head>
+<body>
+<button onClick="TU();">TU</button>
+<button onClick="CQ();">CQ</button>
+<button onClick="glass();">glass</button>
+</body>
+</html>
