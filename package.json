@@ -1,0 +1,14 @@
+{
+  "name": "morse_code_player",
+  "version": "0.0.0",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kmjonsson/morse_code_player.git"
+  },
+  "devDependencies": {
+    "ts-loader": "^2.3.2",
+    "typescript": "^2.4.2",
+    "webpack": "^3.4.1"
+  }
+}
