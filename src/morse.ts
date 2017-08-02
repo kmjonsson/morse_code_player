@@ -75,7 +75,7 @@ export class MorsePlayer {
 			this.silence_dit = (60 / fransworth_wpm - 36 * this.dit) / 14;
 		}
 	}
-	play(text: string) {
+	play(text: string):number {
 		if(this.t > this.context.currentTime) {
 			this.silence(4);
 		} else {
@@ -93,6 +93,7 @@ export class MorsePlayer {
 			}
 			this.char_silence(2);
 		}
+		return this.t - this.context.currentTime;
 	}
 	private play_do(n: number=1) {
 		let o = this.context.createOscillator();
