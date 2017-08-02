@@ -6,7 +6,8 @@ module.exports = {
   entry: ['./src/morse.ts' ],
   output: {
     library: 'MorsePlayer',
-    filename: 'morse_code_player.js'
+    filename: 'morse_code_player.js',
+    umdNamedDefine: true
   },
   resolve: {
     extensions: ['.ts']
