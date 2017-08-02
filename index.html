@@ -3,26 +3,19 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="morse_code_player.js"></script>
 <script>
-var morse;
 $(function() {
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	var ctx = new AudioContext();
-	morse = new MorsePlayer.MorsePlayer(ctx,550,20,10);
+	var morse = new MorsePlayer.MorsePlayer(ctx,550,20,10);
+	$("button").click(function() {
+		morse.play($(this).text());
+	});
 });
-function CQ() { 
-	morse.play("CQ"); 
-}
-function TU() { 
-	morse.play("TU"); 
-}
-function glass() { 
-	morse.play("GLASS"); 
-}
 </script>
 </head>
 <body>
-<button onClick="TU();">TU</button>
-<button onClick="CQ();">CQ</button>
-<button onClick="glass();">glass</button>
+<button>TU</button>
+<button>CQ</button>
+<button>GLASS</button>
 </body>
 </html>

@@ -59,6 +59,10 @@ export class MorsePlayer {
 		this.fransworth(farnsworth_wpm);
 		this.t = this.context.currentTime;
 	}
+	add(char : string, cw: string) {
+		// TODO check for valid info
+		this.cw_map[char.toUpperCase()] = cw;
+	}
 	wpm(wpm: number) {
 		this.dit = 60 / (wpm * 50);	// PARIS
 		this.silence_dit = this.dit;
@@ -75,9 +79,9 @@ export class MorsePlayer {
 		if(this.t > this.context.currentTime) {
 			this.silence(4);
 		} else {
-			this.t = this.context.currentTime;
+			this.t = this.context.currentTime+0.01;
 		}
-		for(let c of text.split("")) {
+		for(let c of text.toUpperCase().split("")) {
 			if(!this.cw_map[c]) {
 				continue;
 			}
