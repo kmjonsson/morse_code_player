@@ -51,6 +51,14 @@ export class MorsePlayer {
 		// Special
 		" ": " ",
 		"?": "..--..",
+		"/": "-..-.",
+		",": "--..--",
+		"-": "-....-",
+		".": ".-.-.-",
+		"@": "...-.-",
+		"+": ".-.-.",
+		"~": "-.-.-",
+		"=": "-...-",
 	};
 	constructor(ctx: AudioContext, freq: number, wpm: number, farnsworth_wpm?: number) {
 		this.context = ctx;
@@ -79,7 +87,7 @@ export class MorsePlayer {
 		if(this.t > this.context.currentTime) {
 			this.silence(4);
 		} else {
-			this.t = this.context.currentTime+0.01;
+			this.t = this.context.currentTime+0.21;
 		}
 		for(let c of text.toUpperCase().split("")) {
 			if(!this.cw_map[c]) {
@@ -93,7 +101,7 @@ export class MorsePlayer {
 			}
 			this.char_silence(2);
 		}
-		return this.t - this.context.currentTime;
+		return this.t - this.context.currentTime - this.dit - this.silence_dit*2;
 	}
 	private play_do(n: number=1) {
 		let o = this.context.createOscillator();
