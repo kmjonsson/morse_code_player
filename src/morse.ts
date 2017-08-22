@@ -9,7 +9,7 @@ export class MorsePlayer {
 	private dit: number;
 	private silence_dit: number;
 	private t: number;
-	private volume: number;
+	private volume: number = 1;
 	private cw_map: CwMap = {
 		// Letters
 		"A": ".-",
