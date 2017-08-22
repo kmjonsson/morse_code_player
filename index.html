@@ -7,15 +7,21 @@ $(function() {
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	var ctx = new AudioContext();
 	var morse = new MorsePlayer.MorsePlayer(ctx,550,20,10);
-	$("button").click(function() {
+	$("button.high").click(function() {
+		morse.set_volume(100);
+		morse.play($(this).text());
+	});
+	$("button.low").click(function() {
+		morse.set_volume(30);
 		morse.play($(this).text());
 	});
 });
 </script>
 </head>
 <body>
-<button>TU</button>
-<button>CQ</button>
-<button>GLASS</button>
+<button class="high">TU</button>
+<button class="low">TU</button>
+<button class="high">CQ</button>
+<button class="high">GLASS</button>
 </body>
 </html>

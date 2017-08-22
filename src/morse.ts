@@ -9,6 +9,7 @@ export class MorsePlayer {
 	private dit: number;
 	private silence_dit: number;
 	private t: number;
+	private volume: number;
 	private cw_map: CwMap = {
 		// Letters
 		"A": ".-",
@@ -83,6 +84,18 @@ export class MorsePlayer {
 			this.silence_dit = (60 / fransworth_wpm - 36 * this.dit) / 14;
 		}
 	}
+	set_volume(vol: number) {
+		if(vol < 0) {
+			vol = 0;
+		}
+		if(vol > 100) {
+			vol = 100;
+		}
+		this.volume = vol/100.0;
+	}
+	get_volume(): number {
+		return this.volume * 100;
+	}
 	play(text: string):number {
 		if(this.t > this.context.currentTime) {
 			this.silence(4);
@@ -108,7 +121,10 @@ export class MorsePlayer {
 		o.frequency.value = this.freq;
 		o.start(this.t);
 		o.stop(this.t+n*this.dit);
-		o.connect(this.context.destination);
+		let gainNode = this.context.createGain();
+		gainNode.gain.value = this.volume*this.volume;
+		o.connect(gainNode);
+		gainNode.connect(this.context.destination);
 		this.t += n*this.dit;
 	}
 	private silence(n:number=1) {
