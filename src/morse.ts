@@ -73,7 +73,9 @@ export class MorsePlayer {
 		this.cw_map[char.toUpperCase()] = cw;
 	}
 	wpm(wpm: number) {
-		this.dit = 60 / (wpm * 50);	// PARIS
+                let dit = 60 / (wpm * 50);      // PARIS
+                // Always end sine @ 0 for better sound.
+                this.dit = Math.round(dit * this.freq) / this.freq;
 		this.silence_dit = this.dit;
 	}
 	fransworth(fransworth_wpm: number) {
