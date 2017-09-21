@@ -10,6 +10,7 @@ export class MorsePlayer {
 	private silence_dit: number;
 	private t: number;
 	private volume: number = 1;
+	private buffers:AudioBuffer[] = [];
 	private cw_map: CwMap = {
 		// Letters
 		"A": ".-",
@@ -61,6 +62,31 @@ export class MorsePlayer {
 		"~": "-.-.-",
 		"=": "-...-",
 	};
+	private generate_ditdah(len:number, rise_time:number = 0.010):number[] {
+		let samplerate:number = 1.0*this.context.sampleRate;
+
+		let samples:number = samplerate * (len + rise_time);
+
+		let rise_time_samples:number = samplerate * rise_time;
+
+		let scale:number = 1.0;
+		let sample:number[] = [];
+
+		for(let n=0;n<samples;n++) {
+			if(n < rise_time_samples) {
+			    scale = Math.sin(n / (rise_time*samplerate) * 0.5 * Math.PI);
+			}
+			if(n > samples-rise_time_samples) {
+			    scale = Math.sin((samples-n) / (rise_time*samplerate) * 0.5 * Math.PI);
+			}
+			sample[n] = Math.sin(n / (samplerate/this.freq) * 2.0 * Math.PI) * scale;
+		}
+		return sample;
+	}
+	pmode:number = 0;
+	mode(m:number) {
+		this.pmode = m;
+	}
 	constructor(ctx: AudioContext, freq: number, wpm: number, farnsworth_wpm?: number) {
 		this.context = ctx;
 		this.freq = freq;
@@ -77,6 +103,7 @@ export class MorsePlayer {
                 // Always end sine @ 0 for better sound.
                 this.dit = Math.round(dit * this.freq) / this.freq;
 		this.silence_dit = this.dit;
+		this.buffers = [];
 	}
 	fransworth(fransworth_wpm: number) {
 		if(fransworth_wpm === undefined) {
@@ -119,10 +146,26 @@ export class MorsePlayer {
 		return this.t - this.context.currentTime - this.dit - this.silence_dit*2;
 	}
 	private play_do(n: number=1) {
-		let o = this.context.createOscillator();
-		o.frequency.value = this.freq;
-		o.start(this.t);
-		o.stop(this.t+n*this.dit);
+		let o;
+		if(this.pmode) {
+			o = this.context.createOscillator();
+			o.frequency.value = this.freq;
+			o.start(this.t);
+			o.stop(this.t+n*this.dit);
+		} else {
+			let b = this.buffers[n];
+			if(b === undefined) { // Generate if not cached
+				let wave = this.generate_ditdah(n*this.dit);
+				b = this.context.createBuffer(1, wave.length, this.context.sampleRate);
+				b.copyToChannel(new Float32Array(wave),0,0);
+				this.buffers[n] = b;
+			}
+			o = this.context.createBufferSource();
+			o.buffer = b;
+			o.start(this.t);
+		}
+
+
 		let gainNode = this.context.createGain();
 		gainNode.gain.value = this.volume*this.volume;
 		o.connect(gainNode);
