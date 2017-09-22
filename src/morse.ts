@@ -83,10 +83,6 @@ export class MorsePlayer {
 		}
 		return sample;
 	}
-	pmode:number = 0;
-	mode(m:number) {
-		this.pmode = m;
-	}
 	constructor(ctx: AudioContext, freq: number, wpm: number, farnsworth_wpm?: number) {
 		this.context = ctx;
 		this.freq = freq;
@@ -146,26 +142,18 @@ export class MorsePlayer {
 		return this.t - this.context.currentTime - this.dit - this.silence_dit*2;
 	}
 	private play_do(n: number=1) {
-		let o;
-		if(this.pmode) {
-			o = this.context.createOscillator();
-			o.frequency.value = this.freq;
-			o.start(this.t);
-			o.stop(this.t+n*this.dit);
-		} else {
-			let b = this.buffers[n];
-			if(b === undefined) { // Generate if not cached
-				let wave = this.generate_ditdah(n*this.dit);
-				b = this.context.createBuffer(1, wave.length, this.context.sampleRate);
-				b.copyToChannel(new Float32Array(wave),0,0);
-				this.buffers[n] = b;
-			}
-			o = this.context.createBufferSource();
-			o.buffer = b;
-			o.start(this.t);
+		let b = this.buffers[n];
+		if(b === undefined) { // Generate if not cached
+			let wave = this.generate_ditdah(n*this.dit);
+			b = this.context.createBuffer(1, wave.length, this.context.sampleRate);
+			b.copyToChannel(new Float32Array(wave),0,0);
+			this.buffers[n] = b;
 		}
+		let o = this.context.createBufferSource();
+		o.buffer = b;
+		o.start(this.t);
 
-
+		// Volume control.
 		let gainNode = this.context.createGain();
 		gainNode.gain.value = this.volume*this.volume;
 		o.connect(gainNode);
