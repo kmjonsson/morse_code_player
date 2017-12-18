@@ -6,7 +6,7 @@
 $(function() {
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	var ctx = new AudioContext();
-	var morse = new MorsePlayer.MorsePlayer(ctx,550,25,20);
+	var morse = new MorsePlayer.MorsePlayer(ctx,550,20,15);
 	$("button.high").click(function() {
 		morse.set_volume(100);
 		morse.play($(this).text());
@@ -25,6 +25,9 @@ $(function() {
 <button class="low">TU</button>
 <button class="high">CQ</button>
 <button class="high">GLASS</button>
+<button class="high">Å</button>
+<button class="high">Ä</button>
+<button class="high">Ö</button>
 <br/>
 </body>
 </html>

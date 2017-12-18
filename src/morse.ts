@@ -61,6 +61,10 @@ export class MorsePlayer {
 		"+": ".-.-.",
 		"~": "-.-.-",
 		"=": "-...-",
+		// Swedish
+		"Å": ".--.-",
+		"Ä": ".-.-",
+		"Ö": "---.",
 	};
 	private generate_ditdah(len:number, rise_time:number = 0.010):number[] {
 		let samplerate:number = 1.0*this.context.sampleRate;
