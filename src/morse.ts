@@ -172,6 +172,7 @@ export class MorsePlayer {
 		this.t += this.silence_dit*n;
 	}
 	public set_freq(freq:number) {
+		this.buffers = [];
 		this.freq = freq;
 	}
 }
