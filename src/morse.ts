@@ -171,4 +171,7 @@ export class MorsePlayer {
 	private char_silence(n:number=1) {
 		this.t += this.silence_dit*n;
 	}
+	public set_freq(freq:number) {
+		this.freq = freq;
+	}
 }
